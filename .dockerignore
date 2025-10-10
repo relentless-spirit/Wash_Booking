@@ -1,0 +1,32 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDEs
+.vs
+.vscode
+.idea
+*.suo
+*.user
+*.userprefs
+.DS_Store
+
+# Build outputs
+**/bin
+**/obj
+**/out
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget
+
+# Test results
+TestResults
+
+# Logs
+*.log
+
+# OS files
+Thumbs.db

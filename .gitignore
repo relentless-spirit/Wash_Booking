@@ -1,0 +1,18 @@
+/WashBooking.sln
+.idea/
+.vs/
+
+### Dotnet ###
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.cache
+*.log
+*.vspscc
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+launchSettings.json
