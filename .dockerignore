@@ -2,31 +2,63 @@
 .git
 .gitignore
 .gitattributes
+.github
 
-# IDEs
+# IDEs and Editors
 .vs
 .vscode
 .idea
 *.suo
 *.user
 *.userprefs
+*.sln.docstates
 .DS_Store
 
 # Build outputs
 **/bin
 **/obj
 **/out
+**/publish
+**/Publish
 
 # NuGet
 *.nupkg
 *.snupkg
 .nuget
+packages/
 
 # Test results
-TestResults
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
 
 # Logs
 *.log
+logs/
 
 # OS files
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Documentation (optional - include if needed)
+README.md
+DEPLOYMENT.md
+LICENSE
+*.md
+
+# Docker files (don't need inside container)
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Render deployment files
+render.yaml
+
+# Environment files (should use env vars instead)
+appsettings.Development.json
+appsettings.Local.json
+*.env
+.env*

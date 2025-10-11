@@ -1,0 +1,69 @@
+# Render Blueprint for WashBooking Application
+# https://render.com/docs/blueprint-spec
+
+services:
+  # Web Service (API)
+  - type: web
+    name: washbooking-api
+    env: docker
+    region: singapore # Choose closest region to your users
+    plan: starter # Change to 'standard' or 'pro' for production
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    
+    # Auto-deploy settings
+    autoDeploy: true
+    branch: main # Change to your default branch name
+    
+    # Health check endpoint
+    healthCheckPath: /swagger/index.html
+    
+    # Environment variables
+    envVars:
+      # ASP.NET Core Settings
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      
+      - key: ASPNETCORE_URLS
+        value: http://+:8080
+      
+      # Database Connection (sync with your Render PostgreSQL)
+      - key: ConnectionStrings__DefaultConnectionStringDB
+        fromDatabase:
+          name: washbooking-db
+          property: connectionString
+      
+      # JWT Settings (use Render secret files or environment variables)
+      - key: JwtSettings__SecretKey
+        generateValue: true # Render will generate a secure random value
+      
+      - key: JwtSettings__Issuer
+        value: WashBooking.API
+      
+      - key: JwtSettings__Audience
+        value: WashBooking.Clients
+      
+      - key: JwtSettings__TokenExpirationInMinutes
+        value: 30
+      
+      - key: JwtSettings__RefreshTokenExpirationInDays
+        value: 7
+      
+      # Swagger Settings
+      - key: EnableSwagger
+        value: true # Set to false in production for security
+      
+      # Booking Settings
+      - key: BookingSettings__MaxConcurrentBookings
+        value: 5
+      
+      - key: BookingSettings__TransitionBufferInMinutes
+        value: 15
+
+# Database (if not already created)
+databases:
+  - name: washbooking-db
+    databaseName: wasing_booking
+    region: singapore
+    plan: starter # Free tier available
+    ipAllowList: [] # Empty means allow all (use specific IPs for production)

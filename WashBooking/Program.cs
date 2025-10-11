@@ -103,14 +103,13 @@ if (app.Environment.IsDevelopment() || enableSwagger)
     });
 }
 
-// Only use HTTPS redirection in Development
-// Render/cloud platforms handle HTTPS at load balancer level
 if (app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
 
 app.UseCors("AllowAll");
+
 
 app.UseAuthentication();
 
