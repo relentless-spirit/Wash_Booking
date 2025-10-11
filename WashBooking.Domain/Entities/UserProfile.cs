@@ -18,7 +18,7 @@ public partial class UserProfile
 
     public Role Role { get; set; } = Role.Customer;
 
-    public bool IsActive { get; set; }
+    public bool IsActive { get; set; } = true;
 
     public DateTime? CreatedAt { get; set; }
 

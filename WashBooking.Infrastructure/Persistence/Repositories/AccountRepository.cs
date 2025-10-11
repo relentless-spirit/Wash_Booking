@@ -25,7 +25,9 @@ namespace WashBooking.Infrastructure.Persistence.Repositories
 
         public async Task<Account?> GetByUsernameAsync(string username)
         {
-            return await _dbSet.SingleOrDefaultAsync(acc => acc.Username.Equals(username));
+            return await _dbSet
+                .IgnoreQueryFilters()
+                .SingleOrDefaultAsync(acc => acc.Username.Equals(username));
         }
     }
 }

@@ -17,12 +17,16 @@ namespace WashBooking.Infrastructure.Persistence.Repositories
 
         public async Task<UserProfile?> GetByEmaiAsync(string email)
         {
-            return await _dbSet.SingleOrDefaultAsync(profile => profile.Email.Equals(email));
+            return await _dbSet
+                .IgnoreQueryFilters()
+                .SingleOrDefaultAsync(profile => profile.Email.Equals(email));
         }
 
         public async Task<UserProfile?> GetByPhoneAsync(string phone)
         {
-            return await _dbSet.SingleOrDefaultAsync(profile => profile.Phone.Equals(phone));
+            return await _dbSet
+                .IgnoreQueryFilters()
+                .SingleOrDefaultAsync(profile => profile.Phone.Equals(phone));
         }
 
         public async Task<List<UserProfile>> GetByRoleAsync(string role)
