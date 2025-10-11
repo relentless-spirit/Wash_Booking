@@ -1,6 +1,11 @@
-/WashBooking.sln
+### IDEs and Editors ###
 .idea/
 .vs/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
 
 ### Dotnet ###
 bin/
@@ -16,3 +21,45 @@ obj/
 *.userosscache
 *.sln.docstates
 launchSettings.json
+
+### NuGet ###
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+### Build Results ###
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Bb]uild/
+[Oo]ut/
+publish/
+
+### Test Results ###
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+### Sensitive Files - DO NOT COMMIT ###
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.json
+!appsettings.json
+*.env
+.env
+.env.*
+*.secret
+
+### Docker ###
+.dockerignore
+
+### OS Files ###
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
