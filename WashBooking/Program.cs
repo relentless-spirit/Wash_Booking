@@ -92,7 +92,10 @@ if (app.Environment.IsDevelopment() || enableSwagger)
     });
 }
 
-app.UseHttpsRedirection();
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication();
 
