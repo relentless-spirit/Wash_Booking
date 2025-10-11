@@ -77,6 +77,17 @@ builder.Services.AddAuthorization();
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection(JwtSettings.SectionName));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin()   // Cho phép bất kỳ nguồn gốc nào
+                .AllowAnyMethod()   // Cho phép bất kỳ phương thức HTTP nào (GET, POST, PUT, DELETE, ...)
+                .AllowAnyHeader();  // Cho phép bất kỳ header nào trong yêu cầu
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -96,6 +107,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
+
+app.UseCors("AllowAll");
+
 
 app.UseAuthentication();
 

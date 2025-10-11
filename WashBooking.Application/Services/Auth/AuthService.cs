@@ -175,7 +175,8 @@ namespace WashBooking.Application.Services.Auth
             }
             catch (Exception e)
             {
-                return Result.Failure(new Error("Auth.Add.Database.Error", "Register failed. Please try again later."));
+                /*return Result.Failure(new Error("Auth.Add.Database.Error", "Register failed. Please try again later."));*/
+                return Result.Failure(new Error("Auth.Add.Database.Error", e.Message.ToString()));
             }
             return Result.Success();
         }
