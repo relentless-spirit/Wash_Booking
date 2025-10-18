@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using WashBooking.Application;
 using WashBooking.Application.Common.Settings;
@@ -13,7 +14,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+builder.Services.AddApiVersioning(options =>
+{
+    // Báo cáo các phiên bản API trong header "api-supported-versions"
+    options.ReportApiVersions = true;
+    // Tự động sử dụng phiên bản mặc định nếu client không chỉ định
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    // Đặt phiên bản mặc định là 1.0
+    options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
+}).AddApiExplorer(options =>
+{
+    // Định dạng version trong URL, ví dụ: 'v'1.0
+    options.GroupNameFormat = "'v'VVV";
+    // Tự động thay thế tham số version trong route
+    options.SubstituteApiVersionInUrl = true;
+});
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

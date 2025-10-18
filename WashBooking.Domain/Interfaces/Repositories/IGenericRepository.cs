@@ -28,6 +28,7 @@ namespace WashBooking.Domain.Interfaces.Repositories
         /// </summary>
         /// <param name="pageIndex">Chỉ số của trang (bắt đầu từ 1).</param>
         /// <param name="pageSize">Số lượng mục trên mỗi trang.</param>
+        /// <param name="filter"></param>
         /// <returns>Kết quả phân trang chứa danh sách các mục và thông tin phân trang.</returns>
         Task<PagedResult<T>> GetPagedAsync(int pageIndex, int pageSize, Expression<Func<T, bool>>? filter = null);
 

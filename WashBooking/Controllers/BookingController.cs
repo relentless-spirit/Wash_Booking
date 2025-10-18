@@ -1,14 +1,18 @@
 using System.Security.Claims;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WashBooking.Application.DTOs.BookingDTO;
+using WashBooking.Application.DTOs.BookingDTO.Request;
+using WashBooking.Application.DTOs.ServiceDTO;
 using WashBooking.Application.Interfaces.Booking;
 using WashBooking.Common;
 using WashBooking.Domain.Common;
 
 namespace WashBooking.Controllers;
 
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
 [Authorize]
 public class BookingController : ControllerBase
@@ -23,9 +27,9 @@ public class BookingController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetBookings()
+    public async Task<IActionResult> GetBookings([FromQuery] GetPagedRequest getPagedRequest)
     {
-        var result = await _bookingService.GetBookingsAsync();
+        var result = await _bookingService.GetBookingsAsync(getPagedRequest);
         if (result.IsFailure)
         {
             if (result.Error.Code.Contains("NotFound"))
@@ -105,9 +109,7 @@ public class BookingController : ControllerBase
         }  
         return CreatedAtAction(nameof(GetBookingById), new { id = result.Value }, new { BookingId = result.Value });
     }
-
     
-
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateBooking(Guid id, [FromBody] UpdateBookingRequest request)
     {
@@ -119,10 +121,26 @@ public class BookingController : ControllerBase
             if (result.Error.Code.Contains("Validation"))
                 return UnprocessableEntity(result.Errors);
             return BadRequest(result.Error);
-        }   
-        return Ok(id);   
+        }
+        return NoContent();
     }
 
+    [Authorize(Roles = "Admin")]
+    [HttpPut("status/{id:guid}")]
+    public async Task<IActionResult> UpdateBookingStatus(Guid id, [FromBody] UpdateBookingStatusRequest request)
+    {
+        var result = await _bookingService.UpdateStatusBookingAsync(id, request);
+        if (result.IsFailure)
+        {
+            if (result.Error.Code.Contains("NotFound"))
+                return NotFound(result.Error);
+            if (result.Error.Code.Contains("Validation"))
+                return UnprocessableEntity(result.Errors);
+            return BadRequest(result.Error);
+        }
+        return NoContent(); 
+    }
+    
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteBooking(Guid id)
     {
@@ -133,6 +151,6 @@ public class BookingController : ControllerBase
                 return NotFound(result.Error);
             return BadRequest(result.Error);
         }
-        return Ok(id);  
+        return NoContent();  
     }
 }

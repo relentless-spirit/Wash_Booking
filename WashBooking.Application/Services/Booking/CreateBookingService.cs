@@ -177,7 +177,7 @@ namespace WashBooking.Application.Services
         {
             var utcRequestedStartTime = DateTime.SpecifyKind(requestedStartTime, DateTimeKind.Utc);
 
-            var allStaff = await _unitOfWork.UserProfileRepository.GetByRoleAsync(Role.Staff.ToString());
+            var allStaff = await _unitOfWork.UserProfileRepository.GetByRoleAsync(nameof(Role.Staff));
             if (!allStaff.Any())
             {
                 return new ScheduleResult
