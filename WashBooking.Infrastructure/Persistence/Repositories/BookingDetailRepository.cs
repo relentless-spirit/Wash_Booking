@@ -43,4 +43,23 @@ public class BookingDetailRepository : GenericRepository<BookingDetail>, IBookin
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task<BookingDetail?> GetBookingDetailByIdAsync(Guid id)
+    { 
+        return await _dbSet
+            .Include(bd => bd.Booking)
+            .Include(bd => bd.Service)
+            .Include(bd => bd.BookingDetailProgresses)
+            .Include(bd => bd.Assignee)
+            .SingleOrDefaultAsync(bd => bd.Id.Equals(id));
+    }
+
+    public async Task<List<BookingDetail>> GetAssignedDetailsByUserIdAsync(Guid userId)
+    {
+        return await _dbSet
+            .Where(bd => bd.AssigneeId.Equals(userId))
+            .Include(bd => bd.Booking)
+            .Include(bd => bd.Service)
+            .ToListAsync();
+    }
 }

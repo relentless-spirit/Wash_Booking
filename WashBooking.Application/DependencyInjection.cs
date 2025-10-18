@@ -21,13 +21,12 @@ namespace WashBooking.Application
             // Add application services here, e.g.:
             services.AddScoped<ICreateBookingService, CreateBookingService>();
             services.AddScoped<IBookingService, BookingService>();
-            //services.AddScoped<IBookingProgressService, BookingProgressService>();
-            //services.AddScoped<IBookingServiceService, BookingServiceService>();
+            services.AddScoped<IBookingDetailService, BookingDetailService>();
             //services.AddScoped<IOauthAccountService, OauthAccountService>();
             services.AddScoped<IRefreshTokenService, RefreshTokenService>();
             //services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IServiceService, ServiceService>();
-            //services.AddScoped<IUserProfileService, UserProfileService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserAuthenticator, UserAuthenticator>();
             services.AddScoped<ITokenOrchestrator, TokenOrchestrator>();

@@ -1,8 +1,12 @@
+using System.Linq.Expressions;
 using System.Security.Claims;
 using AutoMapper;
 using FluentValidation;
+using WashBooking.Application.Common.Settings.StateManagement;
 using WashBooking.Application.DTOs.BookingDTO;
+using WashBooking.Application.DTOs.BookingDTO.Request;
 using WashBooking.Application.DTOs.BookingDTO.Response;
+using WashBooking.Application.DTOs.ServiceDTO;
 using WashBooking.Application.DTOs.ServiceDTO.Response;
 using WashBooking.Application.Interfaces.Booking;
 using WashBooking.Domain.Common;
@@ -17,12 +21,16 @@ public class BookingService : IBookingService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IValidator<UpdateBookingRequest> _updateBookingRequestValidator;
+    private readonly IValidator<GetPagedRequest> _getPagedRequestValidator;
+    private readonly IValidator<UpdateBookingStatusRequest> _updateBookingStatusRequestValidator;
     
-    public BookingService(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateBookingRequest> updateBookingRequestValidator)
+    public BookingService(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateBookingRequest> updateBookingRequestValidator, IValidator<GetPagedRequest> getPagedRequestValidator, IValidator<UpdateBookingStatusRequest> updateBookingStatusRequestValidator)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _updateBookingRequestValidator = updateBookingRequestValidator;
+        _getPagedRequestValidator = getPagedRequestValidator;
+        _updateBookingStatusRequestValidator = updateBookingStatusRequestValidator;
     }
     
     public async Task<Result> UpdateBookingAsync(Guid id, UpdateBookingRequest request)
@@ -129,7 +137,42 @@ public class BookingService : IBookingService
 
         return Result.Success();
     }
-    
+
+    public async Task<Result> UpdateStatusBookingAsync(Guid id, UpdateBookingStatusRequest updateBookingStatusRequest)
+    {
+        var validationResult = _updateBookingStatusRequestValidator.Validate(updateBookingStatusRequest);
+        if (!validationResult.IsValid)
+        {
+            var errors = validationResult.Errors
+                .Select(e => new Error("Booking.UpdateStatusBooking.Validation", e.ErrorMessage))
+                .ToList();
+            return Result.Failure(errors);
+        }
+        
+        var booking = await _unitOfWork.BookingRepository.GetByIdAsync(id);
+        if (booking is null)
+            return Result.Failure(new Error("Booking.UpdateStatusBooking.NotFound", "Booking not found"));
+        
+        if (!BookingStateTransitions.CanTransitionTo(booking.Status, updateBookingStatusRequest.NewStatus))
+        {
+            return Result.Failure(new Error("Service.Complete.InvalidTransition", 
+                $"Cannot complete service from the current status '{booking.Status}'."));
+        }
+        
+        _mapper.Map(updateBookingStatusRequest, booking);
+
+        try
+        {
+            await _unitOfWork.SaveChangesAsync();      
+        }
+        catch (Exception e)
+        {
+            return Result.Failure(new Error("Booking.UpdateStatusBooking.Database.Error", "Update failed. Please try again later."));      
+        }
+        
+        return Result.Success();
+    }
+
     public async Task<Result> DeleteBookingAsync(Guid id)
     {
         var booking = await _unitOfWork.BookingRepository.GetByIdAsync(id);
@@ -150,15 +193,33 @@ public class BookingService : IBookingService
         return Result.Success();
     }
 
-    public async Task<Result<List<AdminBookingDetailResponse>>> GetBookingsAsync()
+    public async Task<Result<PagedResult<AdminBookingDetailResponse>>> GetBookingsAsync(GetPagedRequest getPagedRequest)
     {
-        var bookings = await _unitOfWork.BookingRepository.GetAllBookingForAdminAsync();
-        if (bookings.Count() <= 0)
+        var validationResult = await _getPagedRequestValidator.ValidateAsync(getPagedRequest);
+        if (!validationResult.IsValid)
         {
-            return Result<List<AdminBookingDetailResponse>>.Failure(new Error("Booking.Get.Empty", "Booking no data"));
+            var errors = validationResult.Errors
+                .Select(e => new Error("Booking.GetPaged.Validation", e.ErrorMessage))
+                .ToList();
+            return Result<PagedResult<AdminBookingDetailResponse>>.Failure(errors);
         }
-        var bookingDtos = _mapper.Map<List<AdminBookingDetailResponse>>(bookings);
-        return Result<List<AdminBookingDetailResponse>>.Success(bookingDtos);
+
+        Expression<Func<Booking, bool>>? filter = null;
+        if (!string.IsNullOrWhiteSpace(getPagedRequest.Search))
+        {
+            filter = b => 
+                b.CustomerName.Contains(getPagedRequest.Search) || 
+                b.CustomerPhone.Contains(getPagedRequest.Search) || 
+                b.CustomerEmail.Contains(getPagedRequest.Search) || 
+                b.BookingCode.Contains(getPagedRequest.Search);
+        }
+
+        var result =
+            await _unitOfWork.BookingRepository.GetPagedAsync(getPagedRequest.PageIndex, getPagedRequest.PageSize,
+                filter);
+        
+        var bookingDtos = _mapper.Map<PagedResult<AdminBookingDetailResponse>>(result);
+        return Result<PagedResult<AdminBookingDetailResponse>>.Success(bookingDtos);
     }
 
     public async Task<Result<object>> GetBookingByIdAsync(Guid id, ClaimsPrincipal? user)

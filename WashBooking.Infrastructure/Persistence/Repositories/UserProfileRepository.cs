@@ -2,9 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using WashBooking.Domain.Common;
 using WashBooking.Domain.Entities;
+using WashBooking.Domain.Enums;
 using WashBooking.Domain.Interfaces.Repositories;
 
 namespace WashBooking.Infrastructure.Persistence.Repositories
@@ -31,7 +34,47 @@ namespace WashBooking.Infrastructure.Persistence.Repositories
 
         public async Task<List<UserProfile>> GetByRoleAsync(string role)
         {
-            return await _dbSet.Where(profile => profile.Role.Equals(role)).ToListAsync();
+            if (Enum.TryParse<Role>(role, true, out var roleEnum))
+            {
+                return await _dbSet.Where(profile => profile.Role == roleEnum).ToListAsync();
+            }
+
+            return new List<UserProfile>();
+        }
+
+        public async Task<PagedResult<UserProfile>> GetPagedWithAccountsAsync(int pageIndex, int pageSize, Expression<Func<UserProfile, bool>>? filter)
+        {
+            IQueryable<UserProfile> query = _dbSet
+                .Include(up => up.Accounts) 
+                .AsNoTracking();
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+    
+            var totalCount = await query.CountAsync();
+    
+            var items = await query
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedResult<UserProfile>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = pageIndex,
+                PageSize = pageSize
+            };
+        }
+
+        public async Task<UserProfile?> GetUserByIdAsync(Guid id)
+        {
+            return await _dbSet
+                .Include(up => up.Accounts)
+                .IgnoreQueryFilters()   
+                .SingleOrDefaultAsync(up => up.Id.Equals(id));
         }
     }
 }

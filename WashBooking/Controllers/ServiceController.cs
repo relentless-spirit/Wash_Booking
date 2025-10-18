@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WashBooking.Application.DTOs.ServiceDTO;
@@ -5,7 +6,8 @@ using WashBooking.Application.Interfaces;
 
 namespace WashBooking.Controllers;
 
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
 [Authorize]
 public class ServiceController : ControllerBase
@@ -48,6 +50,7 @@ public class ServiceController : ControllerBase
         return Ok(result.Value);
     }
     
+    [AllowAnonymous]
     [HttpGet("dropdown")]
     public async Task<IActionResult> GetServices()
     {
@@ -79,6 +82,7 @@ public class ServiceController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateServiceRequest updateServiceRequest)
     {
         var result = await _serviceService.UpdateServiceAsync(id, updateServiceRequest);
@@ -97,10 +101,11 @@ public class ServiceController : ControllerBase
             return BadRequest(result.Error);
         }
 
-        return Ok(new { code = "Service.Update.Success", message = "Service updated successfully." });
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Remove(Guid id)
     {
         var result = await _serviceService.DeleteServiceAsync(id);
@@ -112,6 +117,6 @@ public class ServiceController : ControllerBase
             }
             return BadRequest(result.Error);
         }
-        return Ok(new { code = "Service.Delete.Success", message = "Service deleted successfully." });   
+        return NoContent();   
     }
 }

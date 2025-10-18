@@ -1,6 +1,8 @@
 using AutoMapper;
 using WashBooking.Application.DTOs.BookingDTO;
+using WashBooking.Application.DTOs.BookingDTO.Request;
 using WashBooking.Application.DTOs.BookingDTO.Response;
+using WashBooking.Domain.Common;
 using WashBooking.Domain.Entities;
 
 namespace WashBooking.Application.Common;
@@ -67,5 +69,11 @@ public class BookingMappingProfile : Profile
                 opt.Condition((src, dest, srcMember) => srcMember != null));
 
         CreateMap<BookingItemRequest, BookingDetail>();
+        
+        CreateMap<PagedResult<Booking>, PagedResult<AdminBookingDetailResponse>>()
+            .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
+
+        CreateMap<UpdateBookingStatusRequest, Booking>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.NewStatus));
     }
 }

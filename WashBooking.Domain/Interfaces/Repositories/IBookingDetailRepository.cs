@@ -9,4 +9,6 @@ public interface IBookingDetailRepository : IGenericRepository<BookingDetail>
     /// Lấy tất cả các công việc đã được xếp lịch trong một ngày cụ thể.
     /// </summary>
     Task<List<BookingDetail>> GetScheduledBookingsForDateAsync(DateOnly date);
+    Task<BookingDetail?> GetBookingDetailByIdAsync(Guid id);
+    Task<List<BookingDetail>> GetAssignedDetailsByUserIdAsync(Guid userId);
 }
