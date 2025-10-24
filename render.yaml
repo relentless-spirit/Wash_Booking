@@ -44,7 +44,7 @@ services:
         value: WashBooking.Clients
       
       - key: JwtSettings__TokenExpirationInMinutes
-        value: 30
+        value: 1440
       
       - key: JwtSettings__RefreshTokenExpirationInDays
         value: 7
