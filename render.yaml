@@ -63,7 +63,7 @@ services:
 # Database (if not already created)
 databases:
   - name: washbooking-db
-    databaseName: wasing_booking
+    databaseName: wasing_booking_nly3
     region: singapore
     plan: starter # Free tier available
     ipAllowList: [] # Empty means allow all (use specific IPs for production)
