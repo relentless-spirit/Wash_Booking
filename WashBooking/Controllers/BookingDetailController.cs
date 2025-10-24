@@ -35,7 +35,7 @@ namespace WashBooking.Controllers
             {
                 if (result.Error.Code.Contains("Validation")) return UnprocessableEntity(result.Errors);
                 if (result.Error.Code.Contains("NotFound")) return NotFound(result.Error);
-                if (result.Error.Code.Contains("PermissionDenied") || result.Error.Code.Contains("Unassigned")) return StatusCode(StatusCodes.Status403Forbidden, result.Error);
+                // if (result.Error.Code.Contains("PermissionDenied") || result.Error.Code.Contains("Unassigned")) return StatusCode(StatusCodes.Status403Forbidden, result.Error);
                 if (result.Error.Code.Contains("InvalidAction") || result.Error.Code.Contains("BookingNotReady") || result.Error.Code.Contains("InvalidTransition")) 
                     return Conflict(result.Error);
                 return BadRequest(result.Error);
