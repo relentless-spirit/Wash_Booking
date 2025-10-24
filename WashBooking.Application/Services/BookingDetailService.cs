@@ -51,12 +51,12 @@ public class BookingDetailService : IBookingDetailService
 
         // === BƯỚC 3: KIỂM TRA NGHIỆP VỤ & QUYỀN HẠN ===
 
-        // 1. Chặn dùng hàm này cho các hành động đặc biệt
-        if (request.NewStatus == BookingStatus.ServiceInProgress || request.NewStatus == BookingStatus.Completed)
-        {
-            return Result.Failure(new Error("BookingDetail.UpdateStatus.InvalidAction", 
-                "Please use the specific 'Start Service' or 'Complete Service' action to change to this status."));
-        }
+        // // 1. Chặn dùng hàm này cho các hành động đặc biệt
+        // if (request.NewStatus == BookingStatus.ServiceInProgress || request.NewStatus == BookingStatus.Completed)
+        // {
+        //     return Result.Failure(new Error("BookingDetail.UpdateStatus.InvalidAction", 
+        //         "Please use the specific 'Start Service' or 'Complete Service' action to change to this status."));
+        // }
     
         // 2. Kiểm tra trạng thái của Booking cha (ĐÚNG & QUAN TRỌNG)
         if (bookingDetail.Booking.Status == BookingStatus.Scheduled)
@@ -77,19 +77,19 @@ public class BookingDetailService : IBookingDetailService
         Guid.TryParse(userIdString, out var userId);
         var isUserAdmin = user.IsInRole(Role.Admin.ToString());
     
-        if (!isUserAdmin)
-        {
-            if (bookingDetail.AssigneeId == null)
-            {
-                return Result.Failure(new Error("BookingDetail.UpdateStatus.Unassigned", 
-                    "This service is unassigned and can only be managed by an Administrator."));
-            }
-            if (userId != bookingDetail.AssigneeId)
-            {
-                return Result.Failure(new Error("BookingDetail.UpdateStatus.PermissionDenied", 
-                    "Permission denied. Only the assigned staff or an Administrator can update the service."));
-            }
-        }
+        // if (!isUserAdmin)
+        // {
+        //     if (bookingDetail.AssigneeId == null)
+        //     {
+        //         return Result.Failure(new Error("BookingDetail.UpdateStatus.Unassigned", 
+        //             "This service is unassigned and can only be managed by an Administrator."));
+        //     }
+        //     if (userId != bookingDetail.AssigneeId)
+        //     {
+        //         return Result.Failure(new Error("BookingDetail.UpdateStatus.PermissionDenied", 
+        //             "Permission denied. Only the assigned staff or an Administrator can update the service."));
+        //     }
+        // }
         
         // === BƯỚC 4: CẬP NHẬT VÀ GHI LOG ===
         _mapper.Map(request, bookingDetail);
