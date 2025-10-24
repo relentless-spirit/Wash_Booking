@@ -44,6 +44,7 @@ namespace WashBooking.Controllers
             return NoContent();
         }
 
+        [AllowAnonymous]
         /// <summary>
         /// Lấy lịch sử tiến trình của một công việc.
         /// </summary>

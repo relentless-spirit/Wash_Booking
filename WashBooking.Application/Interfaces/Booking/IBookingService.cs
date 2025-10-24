@@ -16,4 +16,5 @@ public interface IBookingService
     Task<Result<PagedResult<AdminBookingDetailResponse>>> GetBookingsAsync(GetPagedRequest getPagedRequest);
     Task<Result<object>> GetBookingByIdAsync(Guid id, ClaimsPrincipal? user);
     Task<Result<object>> TrackByCodeAsync(string bookingCode, ClaimsPrincipal? user);
+    Task<Result<List<CustomerBookingDetailResponse>>> GetMyBooking(ClaimsPrincipal? user);
 }

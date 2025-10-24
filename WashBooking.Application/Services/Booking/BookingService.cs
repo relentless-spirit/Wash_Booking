@@ -286,4 +286,29 @@ public class BookingService : IBookingService
         var guestDto = _mapper.Map<GuestBookingStatusResponse>(booking);
         return Result<object>.Success(guestDto);
     }
+    
+    public async Task<Result<List<CustomerBookingDetailResponse>>> GetMyBooking(ClaimsPrincipal? user)
+    {
+        if (user is null || user.Identity is null || !user.Identity.IsAuthenticated)
+        {
+            return Result<List<CustomerBookingDetailResponse>>.Failure(new Error("Booking.MyBooking.Forbidden", "User is not authenticated."));
+        }
+
+        var userIdString = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!Guid.TryParse(userIdString, out var userId))
+        {
+            return Result<List<CustomerBookingDetailResponse>>.Failure(new Error("Booking.MyBooking.InvalidUser", "Invalid user id."));
+        }
+
+        var bookings = await _unitOfWork.BookingRepository.GetAllBookingByUserIdAsync(userId);
+        if (bookings == null || bookings.Count == 0)
+        {
+            return Result<List<CustomerBookingDetailResponse>>.Failure(new Error("Booking.MyBooking.NotFound", "Booking not found"));
+        }
+        
+        var customerDto = _mapper.Map<List<CustomerBookingDetailResponse>>(bookings);
+        return Result<List<CustomerBookingDetailResponse>>.Success(customerDto);
+    }
+
+
 }

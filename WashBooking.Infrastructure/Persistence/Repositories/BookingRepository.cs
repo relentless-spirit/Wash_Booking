@@ -34,6 +34,10 @@ public class BookingRepository : GenericRepository<Booking>, IBookingRepository
     {
         return await _dbSet
             .Where(b => b.UserProfileId.Equals(userId))
+            .Include(b => b.BookingDetails)
+            .ThenInclude(bd => bd.Service)
+            .Include(b => b.BookingDetails)
+            .ThenInclude(bd => bd.Assignee)
             .ToListAsync();
     }
     
