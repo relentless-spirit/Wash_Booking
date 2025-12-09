@@ -59,11 +59,11 @@ public class BookingDetailService : IBookingDetailService
         // }
     
         // 2. Kiểm tra trạng thái của Booking cha (ĐÚNG & QUAN TRỌNG)
-        if (bookingDetail.Booking.Status == BookingStatus.Scheduled)
-        {
-            return Result.Failure(new Error("BookingDetail.UpdateStatus.BookingNotReady",
-                "Cannot update service status while the main booking has not been checked in."));
-        }
+        // if (bookingDetail.Booking.Status == BookingStatus.Scheduled)
+        // {
+        //     return Result.Failure(new Error("BookingDetail.UpdateStatus.BookingNotReady",
+        //         "Cannot update service status while the main booking has not been checked in."));
+        // }
 
         // 3. Kiểm tra State Machine
         if (!BookingStateTransitions.CanTransitionTo(bookingDetail.Status, request.NewStatus))
