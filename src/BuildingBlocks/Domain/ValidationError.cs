@@ -2,7 +2,6 @@ using BuildingBlocks.Domain;
 
 namespace BuildingBlocks.Domain;
 
-// 1. Đổi Error[] thành IReadOnlyCollection<Error>
 public sealed record ValidationError(IReadOnlyCollection<Error> Errors) : Error(
     "Validation.General",
     "One or more validation errors occurred",
@@ -10,7 +9,6 @@ public sealed record ValidationError(IReadOnlyCollection<Error> Errors) : Error(
 {
     public static ValidationError FromResults(IEnumerable<Result> results)
     {
-        // 2. ToList() hoặc ToArray() đều được, vì Array cũng implement IReadOnlyCollection
         var errors = results
             .Where(r => r.IsError) 
             .Select(r => r.Error)
