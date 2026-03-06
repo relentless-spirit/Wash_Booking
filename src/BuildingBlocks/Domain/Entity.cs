@@ -18,7 +18,6 @@ public abstract class Entity<TId> : IEntity, IAuditableEntity
     {
     }
 
-    // --- Phần Domain Events giữ nguyên, rất chuẩn ---
     private readonly List<IDomainEvent> _domainEvents = [];
 
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
