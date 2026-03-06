@@ -1,0 +1,6 @@
+@WashingBooking.Api_HostAddress = http://localhost:5207
+
+GET {{WashingBooking.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
