@@ -11,7 +11,6 @@ public sealed class ValidationPipelineBehavior<TRequest, TResponse>(
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : class
 {
-    // BÍ THUẬT SIÊU CẤP TỐI ƯU TỪ DEVELOPER: Compile MethodInfo thành Delegate 1 lần duy nhất!
     private static readonly Func<Error, TResponse>? FailureDelegate = CreateFailureDelegate();
 
     private static Func<Error, TResponse>? CreateFailureDelegate()
@@ -66,7 +65,6 @@ public sealed class ValidationPipelineBehavior<TRequest, TResponse>(
             return (TResponse)(object)Result.Failure(validationError);
         }
 
-        // Gọi Delegate thần thánh: Cực nhanh, không đẻ object rác!
         if (FailureDelegate is not null)
         {
             return FailureDelegate(validationError);
