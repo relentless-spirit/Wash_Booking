@@ -9,15 +9,17 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.24" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.5">
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-          <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\BuildingBlocks\BuildingBlocks.csproj" />
-      <ProjectReference Include="..\src\Modules\Users\Modules.Users.Infrastructure\Modules.Users.Infrastructure.csproj" />
+        <ProjectReference Include="..\BuildingBlocks\BuildingBlocks.csproj" />
+        <ProjectReference Include="..\Modules\Users\Modules.Users.Infrastructure\Modules.Users.Infrastructure.csproj" />
+        <ProjectReference Include="..\BuildingBlocks\BuildingBlocks.csproj" />
+        <ProjectReference Include="..\Modules\Users\Modules.Users.Infrastructure\Modules.Users.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
