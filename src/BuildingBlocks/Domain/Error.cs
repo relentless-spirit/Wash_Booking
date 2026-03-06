@@ -3,7 +3,7 @@
 namespace BuildingBlocks.Domain;
 
 [SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification="System is C# only")]
-public record Error // 👈 Dùng record class để hỗ trợ kế thừa
+public record Error 
 {
     public static readonly Error None = new(string.Empty, string.Empty, ErrorType.Failure);
     public static readonly Error NullValue = new("Error.NullValue", "Null value was provided", ErrorType.Failure);
@@ -27,7 +27,7 @@ public record Error // 👈 Dùng record class để hỗ trợ kế thừa
         new(code, message, ErrorType.NotFound);
     
     public static Error Validation(string code, string message) => 
-        new(code, message, ErrorType.Validation); // Cái này cho lỗi đơn lẻ
+        new(code, message, ErrorType.Validation); 
 
     public static Error Conflict(string code, string message) => 
         new(code, message, ErrorType.Conflict);
