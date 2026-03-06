@@ -14,7 +14,6 @@ public sealed class UserContext(IHttpContextAccessor httpContextAccessor) : IUse
 
             if (userId is null || userId == Guid.Empty)
             {
-                // Thay ApplicationException bằng InvalidOperationException
                 throw new InvalidOperationException("User context is unavailable. Are you authenticated?");
             }
 
