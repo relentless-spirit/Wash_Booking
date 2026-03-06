@@ -18,9 +18,8 @@ public abstract class BaseEntityConfiguration<TEntity, TId> : IEntityTypeConfigu
             .IsRequired(); 
 
         builder.Property(e => e.ModifiedOnUtc)
-            .IsRequired(false); // Ngày sửa có thể null
+            .IsRequired(false);
             
-        // 3. (Tuỳ chọn) Config Soft Delete nếu có (IsDeleted)
         // builder.Property(e => e.IsDeleted).HasDefaultValue(false);
         // builder.HasQueryFilter(e => !e.IsDeleted);
         
