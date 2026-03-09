@@ -1,3 +1,4 @@
+using BuildingBlocks.Application.Abstractions.Services;
 using BuildingBlocks.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -6,6 +7,13 @@ namespace BuildingBlocks.Infrastructure.Persistence.Interceptors;
 
 public sealed class AuditableInterceptor : SaveChangesInterceptor
 {
+    private readonly IDateTimeProvider _dateTimeProvider;
+    
+    public AuditableInterceptor(IDateTimeProvider dateTimeProvider)
+    {
+        _dateTimeProvider = dateTimeProvider;
+    }
+    
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
         DbContextEventData eventData,
         InterceptionResult<int> result,
@@ -27,12 +35,12 @@ public sealed class AuditableInterceptor : SaveChangesInterceptor
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Property(a => a.CreatedOnUtc).CurrentValue = DateTime.UtcNow;
+                entry.Property(a => a.CreatedOnUtc).CurrentValue = _dateTimeProvider.UtcNow;
             }
 
             if (entry.State == EntityState.Modified)
             {
-                entry.Property(a => a.ModifiedOnUtc).CurrentValue = DateTime.UtcNow;
+                entry.Property(a => a.ModifiedOnUtc).CurrentValue = _dateTimeProvider.UtcNow;
             }
         }
 

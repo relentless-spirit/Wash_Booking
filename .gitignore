@@ -492,3 +492,5 @@ appsettings.Local.json
 
 #Block Rider’s private configuration folder (Even though .idea/ is already included, add this line to be 100% sure no child files are missed) 
 .idea/workspace.xml
+ARCHITECTURE_AUDIT.md
+README.md

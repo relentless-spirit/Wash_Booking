@@ -22,7 +22,7 @@ public class UserConfiguration : BaseEntityConfiguration<User, Guid>
         builder.Property(u => u.PasswordHash).HasMaxLength(60);
         builder.Property(u => u.FirstName).HasMaxLength(50).IsRequired();
         builder.Property(u => u.LastName).HasMaxLength(50).IsRequired();
-        builder.Property(u => u.PhoneNumber).HasMaxLength(15).IsRequired();
+        builder.Property(u => u.PhoneNumber).HasMaxLength(15).IsRequired(false);
         builder.Property(u => u.Address).HasMaxLength(500);
         
         builder.Property(u => u.IsActive).HasDefaultValue(true);

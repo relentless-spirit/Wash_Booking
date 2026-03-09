@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace Infrastructure.Authentication;
+namespace BuildingBlocks.Infrastructure.Authentication;
 
 
 internal static class ClaimsPrincipalExtensions

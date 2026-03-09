@@ -6,11 +6,11 @@ using Modules.Users.Infrastructure.Persistence.DBContext;
 
 namespace Modules.Users.Infrastructure.Persistence.Repositories;
 
-internal sealed class UserReposity : GenericRepository<User, Guid>, IUserRepository
+internal sealed class UserRepository : GenericRepository<User, Guid>, IUserRepository
 {
     private readonly UserDbContext _context;
     
-    public UserReposity(UserDbContext context) : base(context)
+    public UserRepository(UserDbContext context) : base(context)
     {
         _context = context;
     }

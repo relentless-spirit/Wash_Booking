@@ -1,5 +1,4 @@
-﻿using BuildingBlocks.Application.Abstractions.Services;
-using BuildingBlocks.Domain;
+﻿using BuildingBlocks.Domain;
 
 namespace Modules.Users.Domain.Entities
 {

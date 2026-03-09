@@ -1,13 +1,13 @@
 using System.Text.Json.Serialization;
 using BuildingBlocks.Infrastructure.DependencyInjection;
-using Modules.Users.Infrastructure;
+using WashBooking.Api.DependencyInjections;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
         options.JsonSerializerOptions.Converters
-            .Add(new JsonStringEnumConverter()));;
+            .Add(new JsonStringEnumConverter()));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

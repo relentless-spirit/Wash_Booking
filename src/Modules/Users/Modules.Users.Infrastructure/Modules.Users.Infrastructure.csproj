@@ -10,7 +10,6 @@
       <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks.csproj" />
       <ProjectReference Include="..\Modules.Users.Application\Modules.Users.Application.csproj" />
       <ProjectReference Include="..\Modules.Users.Domain\Modules.Users.Domain.csproj" />
-      <ProjectReference Include="..\Modules.Users.Presentation\Modules.Users.Presentation.csproj" />
     </ItemGroup>
 
     <ItemGroup>

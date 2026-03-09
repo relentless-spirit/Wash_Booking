@@ -18,8 +18,7 @@
     <ItemGroup>
         <ProjectReference Include="..\BuildingBlocks\BuildingBlocks.csproj" />
         <ProjectReference Include="..\Modules\Users\Modules.Users.Infrastructure\Modules.Users.Infrastructure.csproj" />
-        <ProjectReference Include="..\BuildingBlocks\BuildingBlocks.csproj" />
-        <ProjectReference Include="..\Modules\Users\Modules.Users.Infrastructure\Modules.Users.Infrastructure.csproj" />
+        <ProjectReference Include="..\Modules\Users\Modules.Users.Presentation\Modules.Users.Presentation.csproj" />
     </ItemGroup>
 
 </Project>

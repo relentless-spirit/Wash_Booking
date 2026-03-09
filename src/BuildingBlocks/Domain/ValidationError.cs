@@ -1,5 +1,3 @@
-using BuildingBlocks.Domain;
-
 namespace BuildingBlocks.Domain;
 
 public sealed record ValidationError(IReadOnlyCollection<Error> Errors) : Error(

@@ -1,5 +1,4 @@
 using BuildingBlocks.Application.Abstractions.Authentication; 
-using Infrastructure.Authentication;
 using Microsoft.AspNetCore.Http;
 
 namespace BuildingBlocks.Infrastructure.Authentication;
